@@ -1,0 +1,10 @@
+Error:(70, 3) TS2416:
+Property 'onFormStatus' in type 'FormProcess' is not assignable to the same property in base type 'IFormProcess'.
+
+  Type
+  '(status: "CONFIG" | "FORM_GROUP" | "REQUEST" | "LOAD" | "LOAD_SUCCESS" | "LOAD_ERROR", value: any, stateId: string) => Observable<IFormStateHelper>'
+  is not assignable to type
+  '(status: "CONFIG" | "FORM_GROUP" | "REQUEST" | "LOAD" | "LOAD_SUCCESS" | "LOAD_ERROR", value: any, stateId: string) => Observable<IFormState>'.
+
+    Type 'Observable<IFormStateHelper>' is not assignable to type 'Observable<IFormState>'.
+      Property 'status' is missing in type 'IFormStateHelper' but required in type 'IFormState'.
