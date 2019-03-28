@@ -95,6 +95,8 @@ export function xselect<T, Props, K>(
       );
     }
 
-    return mapped$.pipe(distinctUntilChanged(), filter(Boolean));
+    return mapped$.pipe(
+      distinctUntilChanged(), filter(Boolean)
+    );
   };
 }

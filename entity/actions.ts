@@ -1,36 +1,37 @@
-import {Action} from '@ngrx/store';
-
-import {IEntity} from "@libcomm/common/entity/interfaces";
-import {EntityStoreTypes} from "./types";
-import IEntityRequest = EntityStoreTypes.IEntityRequest;
-
-
-export enum EntityActions {
-  REQUEST = '[ENTITY] REQUEST',
-  LOAD = '[ENTITY] LOAD',
-  LOAD_SUCCESS = '[ENTITY] LOAD_SUCCESS',
-  LOAD_ERROR = '[ENTITY] LOAD_ERROR',
-}
-
+import { Action } from '@ngrx/store';
+import { IEntityRequest } from '@xangular-store/entity/types';
+import { IEntity } from '@app-library/ng-http-service/entity/types';
 
 export interface IAction extends Action {
   stateId?: string;
 }
 
-export interface IRequest extends IAction {
-  request: IEntityRequest;
+
+export namespace EntityActions {
+  export enum EActions {
+    REQUEST = '[ENTITY] REQUEST',
+    LOAD = '[ENTITY] LOAD',
+    LOAD_SUCCESS = '[ENTITY] LOAD_SUCCESS',
+    LOAD_ERROR = '[ENTITY] LOAD_ERROR',
+  }
+  export interface IRequest extends IAction {
+    request: IEntityRequest;
+  }
+
+  export interface ILoad extends IAction {
+    request: IEntityRequest;
+  }
+
+  export interface ILoadSuccess extends IAction {
+    entity: IEntity;
+  }
+
+  export interface ILoadError extends IAction {
+    request: IEntityRequest;
+  }
+
+  export interface ISetParent extends IAction {
+    parent: IEntity;
+  }
 }
 
-export interface ILoad extends IAction {
-  request: IEntityRequest;
-}
-
-export interface ILoadSuccess extends IAction {
-  entity: IEntity;
-}
-
-export interface ILoadError extends IAction {
-}
-
-
-export type TActions = IRequest | ILoad | ILoadSuccess | ILoadError

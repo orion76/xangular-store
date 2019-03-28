@@ -1,50 +1,69 @@
-import {ILoad, ILoadError, ILoadSuccess, IRequest} from './actions';
+import { EntityActions } from './actions';
 
-import {EntityAdapter, EntityState} from '@ngrx/entity';
-import {EntityStoreTypes} from "@libcomm/store/entity/types";
+import { EntityAdapter, EntityState } from '@ngrx/entity';
+import { IStateEntity } from '@xangular-store/entity/types';
+
 
 
 export namespace EntityReducer {
   // import Actions = EntityActions.Actions;
 
 
-  import IState = EntityStoreTypes.IState;
 
-  export function addRequest(featureAdapter: EntityAdapter<IState>, action: IRequest, state: EntityState<IState>) {
-
-    const {stateId, request} = action;
-    const entity: IState = {stateId, request};
-
-    entity.status = {REQUEST: true};
-
-    return featureAdapter.addOne(entity, state);
+  export function createHandlers(featureAdapter: EntityAdapter<IStateEntity>) {
+    return {
+      addRequest: addRequest(featureAdapter),
+      load: load(featureAdapter),
+      loadSuccess: loadSuccess(featureAdapter),
+      loadError: loadError(featureAdapter)
+    }
   }
 
-  export function load(featureAdapter: EntityAdapter<IState>, action: ILoad, state: EntityState<IState>) {
+  export function addRequest(featureAdapter: EntityAdapter<IStateEntity>) {
 
-    const {stateId} = action;
-    const entityState = state.entities[stateId];
-    const status = {...entityState.status, LOAD: true};
+    return (action: EntityActions.IRequest, state: EntityState<IStateEntity>): EntityState<IStateEntity> => {
+      const { stateId, request } = action;
+      const stateEntity: IStateEntity = { stateId, request };
 
-    return featureAdapter.updateOne({id: stateId, changes: {status}}, state);
+      stateEntity.status = { REQUEST: true };
+
+      return featureAdapter.addOne(stateEntity, state);
+    }
+
   }
 
-  export function loadSuccess(featureAdapter: EntityAdapter<IState>, action: ILoadSuccess, state: EntityState<IState>) {
+  export function load(featureAdapter: EntityAdapter<IStateEntity>) {
 
-    const {stateId, entity} = action;
-    const entityState = state.entities[stateId];
-    const status = {...entityState.status, LOAD_SUCCESS: true};
+    return (action: EntityActions.ILoad, state: EntityState<IStateEntity>) => {
+      const { stateId } = action;
+      const entityState = state.entities[stateId];
+      const status = { ...entityState.status, LOAD: true };
 
-    return featureAdapter.updateOne({id: stateId, changes: {status, entity}}, state);
+      return featureAdapter.updateOne({ id: stateId, changes: { status } }, state);
+    }
   }
 
-  export function loadError(featureAdapter: EntityAdapter<IState>, action: ILoadError, state: EntityState<IState>) {
+  export function loadSuccess(featureAdapter: EntityAdapter<IStateEntity>) {
 
-    const {stateId} = action;
-    const entityState = state.entities[stateId];
-    const status = {...entityState.status, LOAD_ERROR: true};
+    return (action: EntityActions.ILoadSuccess, state: EntityState<IStateEntity>) => {
 
-    return featureAdapter.updateOne({id: stateId, changes: {status}}, state);
+      const { stateId, entity } = action;
+      const entityState = state.entities[stateId];
+      const status = { ...entityState.status, LOAD_SUCCESS: true };
+
+      return featureAdapter.updateOne({ id: stateId, changes: { status, entity } }, state);
+    }
+  }
+
+  export function loadError(featureAdapter: EntityAdapter<IStateEntity>) {
+
+    return (action: EntityActions.ILoadError, state: EntityState<IStateEntity>) => {
+      const { stateId } = action;
+      const entityState = state.entities[stateId];
+      const status = { ...entityState.status, LOAD_ERROR: true };
+
+      return featureAdapter.updateOne({ id: stateId, changes: { status } }, state);
+    }
   }
 }
 
