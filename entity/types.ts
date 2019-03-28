@@ -1,11 +1,13 @@
-import {IEntity} from "@libcomm/common/entity/interfaces";
-import {EntityStoreSelectors} from "./selectors";
 
 
-export namespace EntityStoreTypes {
+import { IEntity } from '@app-library/ng-http-service/entity/types';
+import { IEntitySelectors } from './selectors/types';
 
 
-  import IEntitySelectors = EntityStoreSelectors.IEntitySelectors;
+
+
+
+
 
   export interface IState {
     stateId: string,
@@ -53,5 +55,5 @@ export namespace EntityStoreTypes {
   }
 
 
-}
+
 

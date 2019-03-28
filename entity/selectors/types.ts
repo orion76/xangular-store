@@ -1,16 +1,14 @@
 import {Dictionary, EntityState} from '@ngrx/entity';
 import {MemoizedSelector, MemoizedSelectorWithProps} from '@ngrx/store';
 import {OperatorFunction} from 'rxjs';
-import {IAppState} from "@app/app-store.module";
-import {EntityStoreTypes} from "@libcomm/store/entity/types";
+import { IAppState } from '@app-store/app-store.module';
+import { IStateProps, IState, IFieldProps, IStatusProps } from '@app-library/xangular-store/entity/types';
 
 
-export namespace EntityStoreSelectors {
 
-  import IState = EntityStoreTypes.IState;
-  import IStateProps = EntityStoreTypes.IStateProps;
-  import IStatusProps = EntityStoreTypes.IStatusProps;
-  import IFieldProps = EntityStoreTypes.IFieldProps;
+
+
+
 
   export interface ISelectFeatureState<StateType> extends MemoizedSelector<IAppState, EntityState<StateType>> {
   }
@@ -56,4 +54,4 @@ export namespace EntityStoreSelectors {
   }
 
 
-}
+
