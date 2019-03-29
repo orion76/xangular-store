@@ -1,6 +1,6 @@
 
 
-import { IEntity } from '@app-library/ng-http-service/entity/types';
+import { IEntity } from "@app-library/ng-http-service/entity/IEntity";
 
 
 export interface IState {
