@@ -1,7 +1,7 @@
 import { createSelector, MemoizedSelector, MemoizedSelectorWithProps } from '@ngrx/store';
-import { onStatus } from '@xangular-store/entity/selectors/operators';
-import { IStateEntity, IStatusProps } from '@xangular-store/entity/types';
-import { xselect } from '@xangular-store/rxjs-operators/select';
+import { onStatus } from './operators';
+import { IStateEntity, IStatusProps } from '../types';
+import { xselect } from '../../rxjs-operators/select';
 import { OperatorFunction } from 'rxjs';
 
 

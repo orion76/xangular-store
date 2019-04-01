@@ -1,7 +1,7 @@
 import { EntityActions } from './actions';
 
 import { EntityAdapter, EntityState } from '@ngrx/entity';
-import { IStateEntity } from '@xangular-store/entity/types';
+import { IStateEntity } from './types';
 
 
 

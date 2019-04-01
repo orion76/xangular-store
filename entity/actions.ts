@@ -1,6 +1,6 @@
 import { Action } from '@ngrx/store';
-import { IEntityRequest } from '@xangular-store/entity/types';
-import { IEntity } from '@app-library/entity/types';
+import { IEntityRequest } from './types';
+import { IEntity } from '@xangular-common/entity/types';
 
 export interface IAction extends Action {
   stateId?: string;
