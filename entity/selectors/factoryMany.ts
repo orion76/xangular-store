@@ -42,11 +42,19 @@ function getSelectors<AppState, StateEntity extends IStateEntity>(feature: Memoi
   // const notStatus = createSelector(entity, ((entity: StateEntity, props: IStatusProps) => entity.status[props.status] !== props.value ? entity.data : null));
 
 
+  // const isStatus = createSelector(entity, ((entity: StateEntity, props: IStatusProps) => {
+  //   return Object.keys(props.status).every((status: string) => entity.status[status] === props[status])
+  // }));
+  // const notStatus = createSelector(entity, ((entity: StateEntity, props: IStatusProps) => {
+  //   return Object.keys(props.status).every((status: string) => entity.status[status] !== props[status])
+  // }));
+
+
   const isStatus = createSelector(entity, ((entity: StateEntity, props: IStatusProps) => {
-    return Object.keys(props.status).every((status: string) => entity.status[status] === props[status])
+    return Object.keys(props.status).every((status: string) => entity.status[status] === props[status]) ? entity : null;
   }));
   const notStatus = createSelector(entity, ((entity: StateEntity, props: IStatusProps) => {
-    return Object.keys(props.status).every((status: string) => entity.status[status] !== props[status])
+    return Object.keys(props.status).every((status: string) => entity.status[status] !== props[status]) ? entity : null;
   }));
 
   return { entities, entity, data, status, counts, isStatus, notStatus };
