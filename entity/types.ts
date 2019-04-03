@@ -45,9 +45,41 @@ export interface IStateEntity extends IState<IEntityStates> {
 
 }
 
+export enum EFilterOperator {
+  EQUAL = '=',
+  NOT_EQUAL = '<>',
+  LARGE = '>',
+  LARGE_OR_EQUAL = '>=',
+  LESS = '<',
+  LESS_OR_EQUAL = '<=',
+  STARTS_WITH = 'STARTS_WITH',
+  CONTAINS = 'CONTAINS',
+  ENDS_WITH = 'ENDS_WITH',
+  IN = 'IN',
+  NOT_IN = 'NOT IN',
+  BETWEEN = 'BETWEEN',
+  NOT_BETWEEN = 'NOT BETWEEN',
+  IS_NULL = 'IS NULL',
+  IS_NOT_NULL = 'IS NOT NULL',
+}
+
+
+export interface IEntityRequestFilterCondition {
+  path: string[],
+  value: string | string[],
+  operator: EFilterOperator
+}
+
+export interface IEntityRequestFilter {
+  name: string,
+  condition: IEntityRequestFilterCondition
+
+}
+
 export interface IEntityRequest {
-  entityId: string;
   source: string;
+  id?: string;
+  filters?: IEntityRequestFilter[]
 }
 
 export interface IStateProps {
