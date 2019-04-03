@@ -1,7 +1,7 @@
 import { EntityAdapter, EntityState } from '@ngrx/entity';
+import * as Immutable from 'immutable';
 import { EntityActions } from './actionsMany';
-import { IStateEntity, IEntityStatus } from './types';
-
+import { IStateRecord, StateRecord, TEntityStatusList, TStatus } from './types';
 
 
 // type IStateEntity = Pick<IStateEntity, keyof IStateEntity>;
@@ -9,37 +9,33 @@ import { IStateEntity, IEntityStatus } from './types';
 
 export namespace EntityReducer {
   // import Actions = EntityActions.Actions;
+  export type StateRecord = Immutable.RecordOf<IStateRecord>;
 
-  export function factoryHandlers<StateEntity extends IStateEntity, StatusEntity extends IEntityStatus>(featureAdapter: EntityAdapter<StateEntity>) {
+  export function factoryHandlers(featureAdapter: EntityAdapter<StateRecord>) {
 
 
-    const setStatus = (statusNew: StatusEntity, statusOld: StatusEntity): StatusEntity => {
+    const setStatus = (statusNew: TStatus<TEntityStatusList>, statusOld: TStatus<TEntityStatusList>): TStatus<TEntityStatusList> => {
       return { ...(statusOld as any), statusNew };
     }
 
 
-    const addRequest = (action: EntityActions.IRequest, state: EntityState<StateEntity>): EntityState<StateEntity> => {
+    const add = (action: EntityActions.IAdd, state: EntityState<StateRecord>): EntityState<StateRecord> => {
       const { stateId, request } = action;
-      const stateEntity = {
-        stateId,
-        data: { request },
-        counts: {},
-        status: setStatus({ REQUEST: true }, {})
-      };
-      return featureAdapter.addOne(stateEntity, state);
+      const stateNew: StateRecord = new StateRecord({ stateId, data: { request }, status: { REQUEST: true } });
+      return featureAdapter.addOne(stateNew, state);
     }
 
 
 
-    const load = (action: EntityActions.ILoad, state: EntityState<StateEntity>): EntityState<StateEntity> => {
+    const load = (action: EntityActions.ILoad, state: EntityState<StateRecord>): EntityState<StateRecord> => {
       const { stateId } = action;
-      const entityState: StateEntity = state.entities[stateId];
+      const entityState: StateRecord = state.entities[stateId];
       const status = setStatus({ LOAD: true }, entityState.status);
       return featureAdapter.updateOne({ id: stateId, changes: { status } }, state);
     }
 
 
-    const loadSuccess = (action: EntityActions.ILoadSuccess, state: EntityState<StateEntity>): EntityState<StateEntity> => {
+    const loadSuccess = (action: EntityActions.ILoadSuccess, state: EntityState<StateRecord>): EntityState<StateRecord> => {
 
       const { stateId, entity } = action;
       const entityState = state.entities[stateId];
@@ -49,7 +45,7 @@ export namespace EntityReducer {
     }
 
 
-    const loadError = (action: EntityActions.ILoadError, state: EntityState<StateEntity>): EntityState<StateEntity> => {
+    const loadError = (action: EntityActions.ILoadError, state: EntityState<StateRecord>): EntityState<StateRecord> => {
       const { stateId } = action;
       const entityState = state.entities[stateId];
       const status = setStatus({ LOAD_ERROR: true }, entityState.status);
@@ -57,7 +53,7 @@ export namespace EntityReducer {
       return featureAdapter.updateOne({ id: stateId, changes: { status } }, state);
     }
     return {
-      addRequest,
+      add,
       load,
       loadSuccess,
       loadError

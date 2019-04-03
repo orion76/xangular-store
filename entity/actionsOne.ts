@@ -9,12 +9,12 @@ export interface IAction extends Action {
 
 export namespace EntityActions {
   export enum EActions {
-    REQUEST = '[ENTITY ONE] REQUEST',
+    ADD_REQUEST = '[ENTITY ONE] ADD_REQUEST',
     LOAD = '[ENTITY ONE] LOAD',
     LOAD_SUCCESS = '[ENTITY ONE] LOAD_SUCCESS',
     LOAD_ERROR = '[ENTITY ONE] LOAD_ERROR',
   }
-  export interface IRequest extends Action {
+  export interface IAdd extends Action {
     request: IEntityRequest;
   }
 

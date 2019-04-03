@@ -1,45 +1,46 @@
-import { EntityAdapter, EntityState } from '@ngrx/entity';
+import * as Immutable from 'immutable';
 import { EntityActions } from './actionsOne';
-import { IStateEntity, IState, IEntityStates, IEntityStatus } from './types';
+import { IStateRecord, StateRecord, TStatus } from './types';
 
 
-type StateType = Partial<IStateEntity>;
-type StatusType = Partial<IEntityStatus>;
+
 
 export namespace EntityReducer {
   // import Actions = EntityActions.Actions;
 
-  export function factoryHandlers() {
+  export type StateRecord = Immutable.RecordOf<IStateRecord>;
 
-    const addRequest = (action: EntityActions.IRequest, state: StateType) => {
+  export function factoryHandlers<StatusList>() {
+
+    const create = (action: EntityActions.IAdd, state: StateRecord): StateRecord => {
       const { request } = action;
-      const stateNew: StateType = { stateId: null, data: { request } };
-      return setStatus({ REQUEST: true }, stateNew)
+      return new StateRecord({ data: { request }, status: { REQUEST: true } });
     }
 
-    const setStatus = (statusNew: StatusType, state: StateType) => {
-      const status = { ...state.status, ...(statusNew as Object) }
-      return { ...state, status };
+    const setStatus = <S extends string>(statusNew: TStatus<S>, state: StateRecord): StateRecord => {
+      return state.withMutations((state: StateRecord) => {
+        Object.keys(statusNew).forEach((key: string) => state.setIn(['status', key], statusNew[key]));
+      });
     }
 
-    const load = (action: EntityActions.ILoad, state: StateType) => {
+    const load = (action: EntityActions.ILoad, state: StateRecord) => {
       return setStatus({ LOAD: true }, state);
     }
 
-    const loadSuccess = (action: EntityActions.ILoadSuccess, state: StateType) => {
+    const loadSuccess = (action: EntityActions.ILoadSuccess, state: StateRecord) => {
       const { entity } = action;
       return { ...setStatus({ LOAD_SUCCESS: true }, state), entity };
     }
 
 
-    const loadError = (action: EntityActions.ILoadError, state: StateType) => {
+    const loadError = (action: EntityActions.ILoadError, state: StateRecord) => {
       return setStatus({ LOAD_ERROR: true }, state);
     }
 
 
     return {
       setStatus,
-      addRequest,
+      create,
       load,
       loadSuccess,
       loadError

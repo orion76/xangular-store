@@ -7,7 +7,7 @@ import { IStateEntity, IStateProps, IStatusProps } from '../types';
 
 
 
-export namespace EntitySelectors {
+export namespace EntitySelectorsMany {
 
   export function create<AppState, StateEntity extends IStateEntity>(feature: MemoizedSelector<AppState, EntityState<StateEntity>>) {
 
@@ -28,7 +28,7 @@ export namespace EntitySelectors {
 
 
 
-export function getSelectors<AppState, StateEntity extends IStateEntity>(feature: MemoizedSelector<AppState, EntityState<StateEntity>>) {
+function getSelectors<AppState, StateEntity extends IStateEntity>(feature: MemoizedSelector<AppState, EntityState<StateEntity>>) {
 
   type State = EntityState<StateEntity>;
 
@@ -38,8 +38,16 @@ export function getSelectors<AppState, StateEntity extends IStateEntity>(feature
   const status = createSelector(entity, ((entity: StateEntity) => entity.status));
   const counts = createSelector(entity, ((entity: StateEntity) => entity.counts));
 
-  const isStatus = createSelector(entity, ((entity: StateEntity, props: IStatusProps) => entity.status[props.status] === props.value ? entity.data : null));
-  const notStatus = createSelector(entity, ((entity: StateEntity, props: IStatusProps) => entity.status[props.status] !== props.value ? entity.data : null));
+  // const isStatus = createSelector(entity, ((entity: StateEntity, props: IStatusProps) => entity.status[props.status] === props.value ? entity.data : null));
+  // const notStatus = createSelector(entity, ((entity: StateEntity, props: IStatusProps) => entity.status[props.status] !== props.value ? entity.data : null));
+
+
+  const isStatus = createSelector(entity, ((entity: StateEntity, props: IStatusProps) => {
+    return Object.keys(props.status).every((status: string) => entity.status[status] === props[status])
+  }));
+  const notStatus = createSelector(entity, ((entity: StateEntity, props: IStatusProps) => {
+    return Object.keys(props.status).every((status: string) => entity.status[status] !== props[status])
+  }));
 
   return { entities, entity, data, status, counts, isStatus, notStatus };
 }

@@ -10,12 +10,14 @@ export interface IStateCount {
   handled: Immutable.Set<string>,
 }
 
-export interface IEntityStatus {
-  REQUEST?: boolean,
-  LOAD?: boolean,
-  LOAD_SUCCESS?: boolean,
-  LOAD_ERROR?: boolean,
-}
+
+
+export type TStatus<Statuses extends string> = { [K in Statuses]?: boolean }
+
+
+export type TEntityStatusList = 'REQUEST' | 'LOAD' | 'LOAD_SUCCESS' | 'LOAD_ERROR';
+export type TEntityStatus = TStatus<TEntityStatusList>;
+
 
 export interface IEntityStates {
   request: IEntityRequest,
@@ -23,15 +25,23 @@ export interface IEntityStates {
 }
 
 
-
-export interface IState<DataType, StatusType> {
+export interface IStateRecord {
   stateId: string,
-  data: DataType,
-  status: { [K in keyof StatusType]?: boolean },
+  data: any,
+  status: { [K: string]: boolean },
+  counts: { [K: string]: IStateCount }
+}
+
+export interface IState<DataType> {
+  stateId: string,
+  data: Partial<DataType>,
+  status: { [K: string]: boolean },
   counts: { [K in keyof DataType]?: IStateCount }
 }
 
-export interface IStateEntity extends IState<IEntityStates, IEntityStatus> {
+export const StateRecord = Immutable.Record<IStateRecord>({ stateId: null, data: {}, counts: {}, status: {} })
+
+export interface IStateEntity extends IState<IEntityStates> {
 
 }
 
@@ -45,8 +55,7 @@ export interface IStateProps {
 }
 
 export interface IStatusProps extends IStateProps {
-  status: string,
-  value: boolean
+  status: { [name: string]: boolean }
 }
 
 
