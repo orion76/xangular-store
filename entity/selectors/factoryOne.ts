@@ -1,6 +1,6 @@
 import { createSelector, MemoizedSelector } from '@ngrx/store';
 import { xselect } from '../../rxjs-operators/select';
-import { IStateEntity, IStateProps, IStatusProps, TEntityStatus, TStatus, IStateRecord } from '../types';
+import { IStateProps, IStateRecord, IStatusProps, TEntityStatus, TStatus } from '../types';
 
 
 

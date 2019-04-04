@@ -17,6 +17,11 @@ export namespace EntityReducer {
       return new StateRecord({ data: { request }, status: { REQUEST: true } });
     }
 
+    const setData = <S extends string>(path: string[], value: any, state: StateRecord): StateRecord => {
+      return state.setIn(['data', ...path], value);
+
+    }
+
     const setStatus = <S extends string>(statusNew: TStatus<S>, state: StateRecord): StateRecord => {
       return state.withMutations((state: StateRecord) => {
         Object.keys(statusNew).forEach((key: string) => state.setIn(['status', key], statusNew[key]));
@@ -39,6 +44,7 @@ export namespace EntityReducer {
 
 
     return {
+      setData,
       setStatus,
       create,
       load,
