@@ -17,7 +17,7 @@ export namespace EntityReducer {
       return new StateRecord({ data: { request }, status: { REQUEST: true } });
     }
 
-    const setData = <S extends string>(path: string[], value: any, state: StateRecord): StateRecord => {
+    const setData = (path: string[], value: any, state: StateRecord): StateRecord => {
       return state.setIn(['data', ...path], value);
 
     }
@@ -34,7 +34,8 @@ export namespace EntityReducer {
 
     const loadSuccess = (action: EntityActions.ILoadSuccess, state: StateRecord) => {
       const { entity } = action;
-      return { ...setStatus({ LOAD_SUCCESS: true }, state), entity };
+      const stateNew = setData(['entity'], entity, state);
+      return setStatus({ LOAD_SUCCESS: true }, stateNew);
     }
 
 
