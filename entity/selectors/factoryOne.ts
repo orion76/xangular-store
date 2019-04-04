@@ -14,10 +14,10 @@ export namespace EntitySelectorsOne {
 
     return {
       entityState: (props: IStateProps) => xselect(selectors.entity, props),
-      entity: (props: IStateProps) => xselect(selectors.entity, props),
-      data: (props: IStateProps) => xselect(selectors.data, props),
-      status: (props: IStateProps) => xselect(selectors.status, props),
-      counts: (props: IStateProps) => xselect(selectors.counts, props),
+      entity: xselect(selectors.entity),
+      data:  xselect(selectors.data),
+      status:  xselect(selectors.status),
+      counts: xselect(selectors.counts),
       isStatus: (status: TStatus<StatusList>) => xselect(selectors.isStatus, { status }),
       notStatus: (status: TEntityStatus) => xselect(selectors.notStatus, { status }),
     }
@@ -31,10 +31,10 @@ function getSelectors<AppState, StateRecord extends IStateRecord>(entity: Memoiz
   const status = createSelector(entity, ((entity: StateRecord) => entity.status));
   const counts = createSelector(entity, ((entity: StateRecord) => entity.counts));
 
-  const isStatus = createSelector(entity, ((entity: StateRecord, props: IStatusProps) => {
+  const isStatus = createSelector(((entity: StateRecord, props: IStatusProps) => {
     return Object.keys(props.status).every((status: string) => entity.status[status] === props[status]) ? entity : null;
   }));
-  const notStatus = createSelector(entity, ((entity: StateRecord, props: IStatusProps) => {
+  const notStatus = createSelector(((entity: StateRecord, props: IStatusProps) => {
     return Object.keys(props.status).every((status: string) => entity.status[status] !== props[status]) ? entity : null;
   }));
 
